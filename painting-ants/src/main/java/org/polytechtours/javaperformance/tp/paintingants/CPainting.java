@@ -47,7 +47,7 @@ public class CPainting extends Canvas implements MouseListener {
   // il sert aussi pour la fonction paint du Canvas
   private Color[][] mCouleurs;
   // couleur du fond
-  private Color mCouleurFond = new Color(255, 255, 255);
+  private static Color COULEUR_FOND = new Color(255, 255, 255);
   // dimensions
   private Dimension mDimension = new Dimension();
 
@@ -67,14 +67,14 @@ public class CPainting extends Canvas implements MouseListener {
     mDimension = pDimension;
     setBounds(new Rectangle(0, 0, mDimension.width, mDimension.height));
 
-    this.setBackground(mCouleurFond);
+    this.setBackground(COULEUR_FOND);
 
     // initialisation de la matrice des couleurs
     mCouleurs = new Color[mDimension.width][mDimension.height];
     synchronized (mMutexCouleurs) {
       for (i = 0; i != mDimension.width; i++) {
         for (j = 0; j != mDimension.height; j++) {
-          mCouleurs[i][j] = new Color(mCouleurFond.getRed(), mCouleurFond.getGreen(), mCouleurFond.getBlue());
+          mCouleurs[i][j] = COULEUR_FOND;
         }
       }
     }
@@ -129,7 +129,7 @@ public class CPainting extends Canvas implements MouseListener {
 
       for (i = 0; i != mDimension.width; i++) {
         for (j = 0; j != mDimension.height; j++) {
-          mCouleurs[i][j] = new Color(mCouleurFond.getRed(), mCouleurFond.getGreen(), mCouleurFond.getBlue());
+          mCouleurs[i][j] = new Color(COULEUR_FOND.getRed(), COULEUR_FOND.getGreen(), COULEUR_FOND.getBlue());
         }
       }
     }
