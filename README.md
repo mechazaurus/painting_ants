@@ -13,14 +13,14 @@ En effet, chaque instanciation de nouvel objet prend du temps et même s'il est 
 
 #### JMH
 
-**Paramètrages**
+##### Paramètrages
 
 |Mode|Throughput|
 |:---|:---|
 |Warmups|5 itérations, 5 secondes|
 |Measurments|5 itérations, 5 secondes|
 
-**Résultats**
+##### Résultats
 
 |Benchmark|Mode|Cnt|Score|Error|Units|
 |:---|:---|:---|:---|:---|:---|
