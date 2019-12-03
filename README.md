@@ -25,4 +25,8 @@ En effet, chaque instanciation de nouvel objet prend du temps et même s'il est 
 |Benchmark|Mode|Cnt|Score|Error|Units|
 |:---|:---|:---|:---|:---|:---|
 |MyBenchmark.benchmarkFillColorWithNew|thrpt|25|21,553|± 0,404|ops/s|
-|MyBenchmark.benchmarkFillColorWithStatic|thrpt|25|148,164|± 31,369| ops/s|
+|MyBenchmark.benchmarkFillColorWithStatic|thrpt|25|148,164|± 31,369|ops/s|
+
+#### Méthode de récupération de la couleur
+
+Les fourmis récupèrent la valeur de la couleur du pixel sur lequel elles sont grâce à une méthode **_getColor()_** qui est synchronisée. Le fait de synchroniser cette méthode donne l'accès à une seule fourmi à la fois. Cependant, son but est uniquement de retourner une valeur et elle n'est pas sensée être concurrente puisque c'est une lecture.
