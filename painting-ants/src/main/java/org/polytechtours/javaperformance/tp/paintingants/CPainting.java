@@ -1,16 +1,12 @@
 package org.polytechtours.javaperformance.tp.paintingants;
-// package PaintingAnts_v2;
 
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-
-// version : 2.0
-
-import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  * <p>
@@ -32,37 +28,47 @@ import java.awt.event.MouseListener;
  */
 
 public class CPainting extends Canvas implements MouseListener {
-	
+
 	// =====================
 	// ===== Attributs =====
 	// =====================
+	
 	private static final long serialVersionUID = 1L;
+	
 	// Matrice servant pour le produit de convolution
 	static private float[][] mMatriceConv9 = new float[3][3];
 	static private float[][] mMatriceConv25 = new float[5][5];
 	static private float[][] mMatriceConv49 = new float[7][7];
+	
 	// Objet de type Graphics permettant de manipuler l'affichage du Canvas
 	private Graphics mGraphics;
-	// Objet ne servant que pour les blocs synchronized pour la manipulation du
-	// tableau des couleurs
+	
+	// Objet ne servant que pour les blocs synchronized pour
+	// la manipulation du tableau des couleurs
 	private Object mMutexCouleurs = new Object();
-	// tableau des couleurs, il permert de conserver en memoire l'état de chaque
-	// pixel du canvas, ce qui est necessaire au deplacemet des fourmi
-	// il sert aussi pour la fonction paint du Canvas
+	
+	// Tableau des couleurs, il permert de conserver en memoire l'état de chaque
+	// pixel du canvas, ce qui est nécessaire au deplacemet des fourmis
+	// Il sert aussi pour la fonction paint du Canvas
 	private Color[][] mCouleurs;
-	// couleur du fond
-	// Passage en statique pour optimiser les performances
-	private static Color COULEUR_FOND = new Color(255, 255, 255);
-	// dimensions
+	
+	// Couleur du fond
+	// (Passage en statique pour optimiser les performances)
+	private static Color COULEUR_FOND = new Color(255, 255, 255); // Blanc
+	
+	// Dimensions
 	private Dimension mDimension = new Dimension();
 
 	private PaintingAnts mApplis;
 
 	private boolean mSuspendu = false;
 
-	/******************************************************************************
-	 * Titre : public CPainting() Description : Constructeur de la classe
-	 ******************************************************************************/
+	
+	
+	// ========================
+	// ===== Constructeur =====
+	// ========================
+	
 	public CPainting(Dimension pDimension, PaintingAnts pApplis) {
 		int i, j;
 		addMouseListener(this);
@@ -74,77 +80,102 @@ public class CPainting extends Canvas implements MouseListener {
 
 		this.setBackground(COULEUR_FOND);
 
-		// initialisation de la matrice des couleurs
+		// Initialisation de la matrice des couleurs
 		mCouleurs = new Color[mDimension.width][mDimension.height];
-		synchronized (mMutexCouleurs) {
-			for (i = 0; i != mDimension.width; i++) {
-				for (j = 0; j != mDimension.height; j++) {
-					// Utilisation d'une couleur statique pour éviter l'instanciation
-					// d'un nouvel objet de la classe Color à chaque fois
-					mCouleurs[i][j] = COULEUR_FOND;
-				}
+		
+		// Synchronized ?! A tester sans...
+		// TODO
+		// Récupération de mDimension.qqch à chaque fois
+		// Créer deux variables contenant l'info
+		// TODO
+		for (i = 0; i != mDimension.width; i++) {
+			for (j = 0; j != mDimension.height; j++) {
+				// Utilisation d'une couleur statique pour éviter l'instanciation
+				// d'un nouvel objet de la classe Color à chaque fois
+				mCouleurs[i][j] = COULEUR_FOND;
 			}
 		}
-
 	}
+	
+	
+	
+	// ====================
+	// ===== Méthodes =====
+	// ====================
 
-	/******************************************************************************
-	 * Titre : Color getCouleur Description : Cette fonction renvoie la couleur
-	 * d'une case
-	 ******************************************************************************/
+	/**
+	 * Récupération de la couleur d'un pixel à une position donnée
+	 * @param int x : La position en x
+	 * @param int y : La position en y
+	 * @return Un objet Color contenant les informations de la couleur du pixel
+	 */
 	public Color getCouleur(int x, int y) {
 		// La lecture d'une valeur n'est pas sujet à la concurrence
+		// (On retire le synchronized)
 		return mCouleurs[x][y];
 	}
 
-	/******************************************************************************
-	 * Titre : Color getDimension Description : Cette fonction renvoie la dimension
-	 * de la peinture
-	 ******************************************************************************/
+	/**
+	 * Récupération de la couleur dimension
+	 * @return Les dimensions de la fenêtre
+	 */
 	public Dimension getDimension() {
 		return mDimension;
 	}
 
-	/******************************************************************************
-	 * Titre : Color getHauteur Description : Cette fonction renvoie la hauteur de
-	 * la peinture
-	 ******************************************************************************/
+	/**
+	 * Récupération de la hauteur
+	 * @return La hauteur de la fenêtre
+	 */
 	public int getHauteur() {
 		return mDimension.height;
 	}
 
-	/******************************************************************************
-	 * Titre : Color getLargeur Description : Cette fonction renvoie la hauteur de
-	 * la peinture
-	 ******************************************************************************/
+	/**
+	 * Récupération de la largeur
+	 * @return La largeur de la fenêtre
+	 */
 	public int getLargeur() {
 		return mDimension.width;
 	}
 
-	/******************************************************************************
-	 * Titre : void init() Description : Initialise le fond a la couleur blanche et
-	 * initialise le tableau des couleurs avec la couleur blanche
-	 ******************************************************************************/
+
+	
+	// ==========================
+	// ===== Initialisation =====
+	// ==========================
+	
+	/**
+	 * Initialise le fond à la couleur blanche et initialise
+	 * le tableau des couleurs avec la couleur blanche
+	 */
 	public void init() {
+		
 		int i, j;
+		
 		mGraphics = getGraphics();
-		synchronized (mMutexCouleurs) {
-			mGraphics.clearRect(0, 0, mDimension.width, mDimension.height);
+		
+		// Synchronized ?! A tester sans...
+		// TODO
+		mGraphics.clearRect(0, 0, mDimension.width, mDimension.height);
 
-			// initialisation de la matrice des couleurs
-
-			for (i = 0; i != mDimension.width; i++) {
-				for (j = 0; j != mDimension.height; j++) {
-					mCouleurs[i][j] = new Color(COULEUR_FOND.getRed(), COULEUR_FOND.getGreen(), COULEUR_FOND.getBlue());
-				}
+		// Initialisation de la matrice des couleurs
+		// Récupération de mDimension.qqch à chaque fois
+		// Créer deux variables contenant l'info
+		// TODO
+		for (i = 0; i != mDimension.width; i++) {
+			for (j = 0; j != mDimension.height; j++) {
+				// Utilisation d'une couleur statique pour éviter l'instanciation
+				// d'un nouvel objet de la classe Color à chaque fois
+				mCouleurs[i][j] = COULEUR_FOND;
 			}
 		}
 
-		// initialisation de la matrice de convolution : lissage moyen sur 9
-		// cases
-		/*
-		 * 1 2 1 2 4 2 1 2 1
-		 */
+		// Initialisation de la matrice de convolution
+		// Lissage moyen sur 9 cases
+		// 	[1 2 1]
+		// 	[2 4 2]
+		// 	[1 2 1]
 		CPainting.mMatriceConv9[0][0] = 1 / 16f;
 		CPainting.mMatriceConv9[0][1] = 2 / 16f;
 		CPainting.mMatriceConv9[0][2] = 1 / 16f;
@@ -155,10 +186,14 @@ public class CPainting extends Canvas implements MouseListener {
 		CPainting.mMatriceConv9[2][1] = 2 / 16f;
 		CPainting.mMatriceConv9[2][2] = 1 / 16f;
 
-		// initialisation de la matrice de convolution : lissage moyen sur 25
-		// cases
+		// initialisation de la matrice de convolution
+		// Lissage moyen sur 25 cases
 		/*
-		 * 1 1 2 1 1 1 2 3 2 1 2 3 4 3 2 1 2 3 2 1 1 1 2 1 1
+		 * [1 1 2 1 1]
+		 * [1 2 3 2 1]
+		 * [2 3 4 3 2]
+		 * [1 2 3 2 1]
+		 * [1 1 2 1 1]
 		 */
 		CPainting.mMatriceConv25[0][0] = 1 / 44f;
 		CPainting.mMatriceConv25[0][1] = 1 / 44f;
