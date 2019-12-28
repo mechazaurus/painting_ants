@@ -13,36 +13,36 @@ import java.util.Vector;
 
 public class CColonie implements Runnable {
 
-  private Boolean mContinue = Boolean.TRUE;
-  private Vector<CFourmi> mColonie;
-  private PaintingAnts mApplis;
+	private Boolean mContinue = Boolean.TRUE;
+	private Vector<CFourmi> mColonie;
+	private PaintingAnts mApplis;
 
-  /** Creates a new instance of CColonie */
-  public CColonie(Vector<CFourmi> pColonie, PaintingAnts pApplis) {
-    mColonie = pColonie;
-    mApplis = pApplis;
-  }
+	/**
+	 *  Creates a new instance of CColonie
+	 */
+	public CColonie(Vector<CFourmi> pColonie, PaintingAnts pApplis) {
+		mColonie = pColonie;
+		mApplis = pApplis;
+	}
 
-  public void pleaseStop() {
-    mContinue = false;
-  }
+	public void pleaseStop() {
+		mContinue = false;
+	}
 
-  @Override
-  public void run() {
+	@Override
+	public void run() {
 
-    while (mContinue == true) {
-      if (!mApplis.getPause()) {
-        for (int i = 0; i < mColonie.size(); i++) {
-          mColonie.get(i).deplacer();
-          mApplis.compteur();
-        }
-      } else {
-        /*
-         * try { Thread.sleep(100); } catch (InterruptedException e) { break; }
-         */
-
-      }
-    }
-  }
+		// Le thread qui gère la colonie traite les fourmis de façon séquentielle
+		while (mContinue == true) {
+			if (!mApplis.getPause()) {
+				for (int i = 0; i < mColonie.size(); i++) {
+					mColonie.get(i).deplacer();
+					mApplis.compteur();
+				}
+			} else {
+				// Rien
+			}
+		}
+	}
 
 }
