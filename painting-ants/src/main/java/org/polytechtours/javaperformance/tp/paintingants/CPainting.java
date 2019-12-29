@@ -83,11 +83,7 @@ public class CPainting extends Canvas implements MouseListener {
 		// Initialisation de la matrice des couleurs
 		mCouleurs = new Color[mDimension.width][mDimension.height];
 		
-		// Synchronized ?! A tester sans...
-		// TODO
-		// Récupération de mDimension.qqch à chaque fois
-		// Créer deux variables contenant l'info
-		// TODO
+		// Remplissage avec la couleur de fond
 		for (i = 0; i != mDimension.width; i++) {
 			for (j = 0; j != mDimension.height; j++) {
 				// Utilisation d'une couleur statique pour éviter l'instanciation
@@ -159,17 +155,13 @@ public class CPainting extends Canvas implements MouseListener {
 		// TODO
 		mGraphics.clearRect(0, 0, mDimension.width, mDimension.height);
 
-		// Initialisation de la matrice des couleurs
-		// Récupération de mDimension.qqch à chaque fois
-		// Créer deux variables contenant l'info
-		// TODO
-		for (i = 0; i != mDimension.width; i++) {
+		// Le remplissage est déjà effectué lors de l'appel
+		// au constructeur de CPainting, traitement inutile
+		/* for (i = 0; i != mDimension.width; i++) {
 			for (j = 0; j != mDimension.height; j++) {
-				// Utilisation d'une couleur statique pour éviter l'instanciation
-				// d'un nouvel objet de la classe Color à chaque fois
 				mCouleurs[i][j] = COULEUR_FOND;
 			}
-		}
+		} */
 
 		// Initialisation de la matrice de convolution
 		// Lissage moyen sur 9 cases
